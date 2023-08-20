@@ -1,0 +1,57 @@
+body {
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: color-mix(in hsl shorter hue, color percentage, color percentage);
+}
+
+.stopwatch {
+    text-align: center;
+    position: relative;
+}
+
+.time-display {
+    font-size: 2em;
+    margin-bottom: auto;
+    color: rgb(16, 19, 19);
+}
+
+.btn {
+    font-size: 1em;
+    padding: 10px 20px;
+    margin: 5px;
+    background-color: color(from color srgb r g b);
+    color: calc();
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#reset {
+    /* Hide the reset button by default */
+    display: none;
+}
+
+.btn:hover {
+    background-color: aliceblue;
+}
+
+.lap {
+    background-color: #2196f3;
+    color: white;
+}
+
+.laps {
+    text-align: left;
+    margin-top: 20px;
+}
+
+.lap-entry {
+    font-size: 18px;
+    margin: 5px 0;
+    color: #333;
+}
