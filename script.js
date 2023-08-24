@@ -12,44 +12,49 @@ let lapCounter = 1;
 // Get reference to the "lap" button
 const lapButton = document.getElementById('lap')
 
+const modeToggle = document.getElementById('mode-toggle');
+const stopwatch = document.querySelector('.stopwatch');
 
-// Initialising the variables
+// Initialize variables to track stopwatch state and timings
 // Tracks if the stopwatch is running
 let running = false;
-// Tracks the elapsed time in seconds
-let time = 0;
-// Holds the interval id for the updated loop
-let interval;
+var startTime = null,
+    stopTime = null,
+    pausedDuration = 0,
+    intervalID = null;
 
-// Function to update the displayed time
-function updateTime() {
-    const hours = Math.floor(time / 3600)
-    const minutes = Math.floor((time / 3600) / 60)
-    const seconds = time % 60;
-    // Formatting and displaying the time on screen as HH:MM:SS
-    const formattedTime = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`
-    // Updating the displayed time
-    timeDisplay.textContent = formattedTime;
-}
+modeToggle.addEventListener('change', function () {
+    if (modeToggle.checked) {
+        // Enable dark mode
+        stopwatch.classList.add('dark-mode');
+    } else {
+        // Enable light mode
+        stopwatch.classList.remove('dark-mode');
+    }
+});
 
 startButton.addEventListener('click', () => {
     // If the stopwatch is not running
     if (!running) {
-        interval = setInterval(() => {
-            // Increment The elapsed time
-            time++;
-            // Update the displayed Time
-            updateTime();
-            // Running the interval every 1 seconds
-        }, 1000)
+        // If the stopwatch has not started before, set the start time
+        if (startTime === null) {
+            startTime = new Date();
+        }
 
-        // Change the button to Stop
+        // If the stopwatch was previously paused, calculate the paused duration
+        if (stopTime !== null) {
+            pausedDuration += (new Date() - stopTime);
+        }
+
+        // Start an interval to update the display every 10 milliseconds
+        intervalID = setInterval(updateDisplay, 10);
         startButton.textContent = 'Stop';
         resetButton.style.display = 'inline-block'; // Show the reset button
     }
     else {
-        // Clear the interval to stop the updating the time
-        clearInterval(interval);
+        // Record the pause time and clear the interval
+        stopTime = new Date();
+        clearInterval(intervalID);
         startButton.textContent = 'Start'
     }
     // Toggling the running state
@@ -57,43 +62,74 @@ startButton.addEventListener('click', () => {
 })
 
 resetButton.addEventListener('click', () => {
-    // Clear the interval
-    resetButton.style.display = 'none'; // Show the reset button
-    clearInterval(interval);
+    // Clear the interval, reset timings, and update the display
+    clearInterval(intervalID);
+    pausedDuration = 0;
+    startTime = null;
+    stopTime = null;
+
+    resetButton.style.display = 'none'; // dont show the reset button
     startButton.textContent = "Start";
-    // Set the running state to false
     running = false;
-    // Reseting the timer back to zero
-    time = 0;
-    // Resetting the display text content of the time
-    updateTime();
+    // Reset the timmings
+    document.getElementById("display").innerHTML = "00:00:00.000";
     // Resetting all the captured laps
     lapsContainer.innerHTML = ''; // Will reomve all the laps entries
     lapCounter = 1; // reset the lap counter
 
 })
 
+// Function to update the display with the current stopwatch time
+function updateDisplay() {
+    // Get the current time
+    var currentTime = new Date();
+    // Calculate the elapsed time by subtracting the start time and paused duration
+    // This gives us the time that has passed since the stopwatch started (excluding pauses)
+    var elapsed = new Date(currentTime - startTime - pausedDuration);
+    // Update the display with the formatted time
+    document.getElementById("display").innerHTML = formattedTime(elapsed)
+};
+
+
 
 
 // Event listener for the "lap" button
 lapButton.addEventListener('click', () => {
     if (running) {
-        const lapTime = time;
+        const lapTime = new Date(new Date() - startTime - pausedDuration);
         const lapElement = document.createElement('div');
-        lapElement.textContent = `lap ${lapCounter}: ${formattedTime(lapTime)}`
-        lapElement.classList.add('lap-entry')
+        lapElement.classList.add('lap-entry'); // Add the CSS class for lap entry
+
+        const lapCounterElement = document.createElement('span');
+        lapCounterElement.textContent = `Lap ${lapCounter}:`;
+        lapElement.appendChild(lapCounterElement); // Add lap counter to the left
+
+        const lapTimeElement = document.createElement('span');
+        lapTimeElement.textContent = formattedTime(lapTime);
+        lapTimeElement.style.marginLeft = 'auto'; // Push lap time to the right
+        lapElement.appendChild(lapTimeElement); // Add lap time to the right
+
         console.log(lapElement);
         lapsContainer.prepend(lapElement);
         lapCounter++;
     }
+
 })
 
 
-// Format the time
-// Function to format time as HH:MM:SS
-function formattedTime(seconds) {
-    const hours = Math.floor(seconds / 3600);
-    const minutes = Math.floor((seconds % 3600) / 60);
-    const formattedTime = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds % 60).padStart(2, '0')}`;
+// // Format the time
+// Function to format time as HH:MM:SS.MS
+function formattedTime(time) {
+    // Extract hours, minutes, seconds, and milliseconds from the elapsed time
+    var hours = time.getUTCHours();        // Get the hours component of the elapsed time
+    var minutes = time.getUTCMinutes();    // Get the minutes component of the elapsed time
+    var seconds = time.getUTCSeconds();    // Get the seconds component of the elapsed time
+    var milliseconds = time.getUTCMilliseconds(); // Get the milliseconds component of the elapsed time
+    // Format hours, minutes, seconds, and milliseconds with leading zeros if needed
+    const formattedTime = (hours > 9 ? hours : "0" + hours) + ":" +               // Hours
+        (minutes > 9 ? minutes : "0" + minutes) + ":" +         // Minutes
+        (seconds > 9 ? seconds : "0" + seconds) + "." +         // Seconds
+        (milliseconds > 99 ? milliseconds :                      // Milliseconds
+            milliseconds > 9 ? "0" + milliseconds : "00" + milliseconds);
     return formattedTime;
 }

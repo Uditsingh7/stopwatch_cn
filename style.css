@@ -11,18 +11,53 @@ body {
 .stopwatch {
     text-align: center;
     position: relative;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    padding: 20px;
+    background-color: white;
+    width: 300px;
+    height: 450px;
+    /* Set a fixed width for the outer box */
+    margin: 0 auto;
+    /* Center the outer box horizontally */
+}
+
+/* Dark mode styles */
+.dark-mode {
+    background-color: #333;
+    /* Change to the desired dark mode background color */
+    color: white;
+
+    /* Change text color for better contrast */
+    /* Adjust lap-entry color for better visibility */
+    .lap-entry {
+        color: white;
+    }
 }
 
 .time-display {
-    font-size: 2em;
-    margin-bottom: auto;
+    font-size: 3em;
+    /* Increase font size for the time display */
+    margin-bottom: 5px 15px;
+    margin-top: 80px;
+    /* Adjust margin for spacing */
     color: rgb(16, 19, 19);
 }
 
+.btn-container {
+    display: flex;
+    flex-direction: row;
+    /* Arrange buttons horizontally */
+    justify-content: center;
+    /* Center align the buttons horizontally */
+    flex-wrap: wrap;
+    /* Allow buttons to wrap to a new line when needed */
+}
+
 .btn {
-    font-size: 1em;
+    font-size: 1.5em;
     padding: 10px 20px;
-    margin: 5px;
+    margin: 15px;
     background-color: color(from color srgb r g b);
     color: calc();
     border: none;
@@ -32,7 +67,6 @@ body {
 }
 
 #reset {
-    /* Hide the reset button by default */
     display: none;
 }
 
@@ -47,11 +81,82 @@ body {
 
 .laps {
     text-align: left;
-    margin-top: 20px;
+    margin-top: 10px;
+    max-height: 120px;
+    overflow-y: scroll;
+    /* Use "scroll" to always show the scrollbar */
 }
 
 .lap-entry {
     font-size: 18px;
     margin: 5px 0;
     color: #333;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.lap-entry span:first-child {
+    margin-right: auto;
+    /* Push the first child (lap counter) to the left */
+}
+
+
+/* Add this to your existing CSS or modify as needed */
+
+/* Toggle switch styling */
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 20px;
+}
+
+/* Hide default checkbox */
+.toggle-switch input {
+    display: none;
+}
+
+/* Slider styling */
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: 0.4s;
+    border-radius: 20px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    transition: 0.4s;
+    border-radius: 50%;
+}
+
+/* Round slider */
+.slider.round {
+    border-radius: 20px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+/* Change slider color when toggle is checked */
+.toggle-switch input:checked+.slider {
+    background-color: #2196F3;
+}
+
+/* Move slider to the right when toggle is checked */
+.toggle-switch input:checked+.slider:before {
+    transform: translateX(20px);
 }

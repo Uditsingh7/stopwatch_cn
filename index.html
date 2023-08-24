@@ -11,12 +11,18 @@
 <body>
     <!-- Time Trapper -->
     <div class="stopwatch">
-        <div class="time-display" id="display">00:00:00</div>
-        <div class="controls">
+        <div class="toggle-container">
+            <label class="toggle-switch">
+                <input type="checkbox" id="mode-toggle">
+                <span class="slider round"></span>
+            </label>
+        </div>
+        <div class="time-display" id="display">00:00:00.000</div>
+        <div class="btn-container">
             <button id="start" class="btn">&#9654;</button><br />
             <button id="reset" class="btn">Reset</button>
+            <button class="btn" id="lap">Lap</button>
         </div>
-        <button class="btn" id="lap">Lap</button>
         <div class="laps" id="laps"></div>
         <div class="circle"></div>
     </div>
