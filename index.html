@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Time Trapper</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+    <!-- Time Trapper -->
+    <div class="stopwatch">
+        <div class="toggle-container">
+            <label class="toggle-switch">
+                <input type="checkbox" id="mode-toggle">
+                <span class="slider round"></span>
+            </label>
+        </div>
+        <div class="time-display" id="display">00:00:00.000</div>
+        <div class="btn-container">
+            <button id="start" class="btn">&#9654;</button><br />
+            <button id="reset" class="btn">Reset</button>
+            <button class="btn" id="lap">Lap</button>
+        </div>
+        <div class="laps" id="laps"></div>
+        <div class="circle"></div>
+    </div>
+    <script src="./script.js"></script>
+</body>
+
+</html>
